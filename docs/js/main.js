@@ -45,76 +45,20 @@ window.addEventListener('DOMContentLoaded', async(event) => {
     Loading.setup()
     PartySparkleHart.setup()
     PartySparkleImage.setup()
-    /*
-    const downloader = new FaviconDownloader()
-    document.getElementById('download').addEventListener('click', async(event) => {
-        const hostNames = new Set(document.getElementById('urls').value.split(/\r\n|\n/).filter(v=>v.startsWith('https')).map(l=>new URL(l).hostname))
-        console.debug(hostNames)
-        console.debug(hostNames.values())
-        console.debug(Array.from(hostNames))
-        //const files = await Promise.all(hostNames.values().map(h=>FaviconGetter.get(h)))
-        const _files = await Promise.all(Array.from(hostNames).map(h=>FaviconGetter.get(h)))
-        console.debug(_files)
-        const files = _files.filter(v=>v)
-        console.debug(files)
-        if (0 < files.length) { await downloader.download(files) }
-        else { Toaster.toast('<link rel="icon">をもつURL先がひとつもありません。', true) }
-    })
-    */
-    const sqlFile = new Sqlite3DbFile()
-    sqlFile.load()
-    const uploader = new Sqlite3DbUploader(sqlFile)
-    uploader.setup() 
-    const downloader = new Sqlite3DbDownloader(sqlFile)
-    document.getElementById('download').addEventListener('click', async(event) => {
-        downloader.download() 
-    })
-    document.getElementById('update').addEventListener('click', async(event) => {
-        if (sqlFile.DirHandle) {
-            //const names = document.getElementById('update').value.split(/\r\n|\n/).filter(v=>v)
-            sqlFile.db.exec(`insert into users(name) values ('ytyaru');`)
-            sqlFile.write()
-        }
-    })
-    /*
-    const sqlFile = new Sqlite3DbFile()
-    const db = await sqlFile.read('users.db')
-    db.exec(`select sqlite_version();`)
-    */
-    /*
-    const uploader = new Sqlite3DbUploader()
-    uploader.setup() 
-    const downloader = new Sqlite3DbDownloader()
-    document.getElementById('download').addEventListener('click', async(event) => {
-        downloader.download() 
-    })
-    */
-    /*
-    PartySparkleHart.setup()
-    PartySparkleImage.setup()
-    //await gen.generate()
-    document.getElementById('get-address').dispatchEvent(new Event('click'))
-    imgSz.show();
-    //Loading.hide()
-    */
-    /*
-    initSqlJs({
-        locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/${file}`
-    }).then(SQL => {
-        const db = new SQL.Database();
-        let res = JSON.stringify(db.exec("SELECT sqlite_version();"));
-        console.debug(res)
-        res = JSON.stringify(db.exec(`CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT);`));
-        console.debug(res)
-        res = JSON.stringify(db.exec(`INSERT INTO users(name) VALUES ('ytyaru');`));
-        console.debug(res)
-        res = JSON.stringify(db.exec(`SELECT * FROM users;`));
-        console.debug(res)
-        //db.export()
-        const downloader = new Sqlite3DbDownloader()
-        downloader.download() 
-    });
-    */
+
+    const user = new UseDexie()
+    console.debug(await user.gets())
+    await user.clear() 
+    console.debug(await user.gets())
+    await user.upsert() 
+    console.debug(await user.gets())
+    await user.insert() 
+    console.debug(await user.gets())
+    await user.update() 
+    console.debug(await user.gets())
+    console.debug(await user.get())
+    await user.delete() 
+    console.debug(await user.gets())
 });
 window.addEventListener('load', async(event) => {
     //Loading.hide()

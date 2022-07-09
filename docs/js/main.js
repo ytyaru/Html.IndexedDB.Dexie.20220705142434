@@ -4,6 +4,11 @@ window.addEventListener('DOMContentLoaded', async(event) => {
           .on('stateChanged', async(isUnlocked) => { /*await init();*/ console.log(isUnlocked); })
           .on('addressChanged', async(address) => { /*await init(address);*/ console.log(address); });
     } catch(e) { console.debug(e) }
+    document.getElementById(`update`).addEventListener('click', async(event) => {
+        sqlFile.db.exec(`INSERT INTO users(name) VALUES ('ytyaru');`)
+        sqlFile.write()
+        //const db = await this.sqlFile.read('users.db')
+    })
     document.addEventListener('mastodon_redirect_rejected', async(event) => {
         console.debug('認証エラーです。認証を拒否しました。')
         console.debug(event.detail.error)
@@ -46,19 +51,15 @@ window.addEventListener('DOMContentLoaded', async(event) => {
     PartySparkleHart.setup()
     PartySparkleImage.setup()
 
-    const user = new UseDexie()
-    console.debug(await user.gets())
-    await user.clear() 
-    console.debug(await user.gets())
-    await user.upsert() 
-    console.debug(await user.gets())
-    await user.insert() 
-    console.debug(await user.gets())
-    await user.update() 
-    console.debug(await user.gets())
-    console.debug(await user.get())
-    await user.delete() 
-    console.debug(await user.gets())
+Loading.setup()
+    const sqlFile = new Sqlite3DbFile()
+    await sqlFile.load() // sqlite3-db-file.js:43 Uncaught (in promise) TypeError: dirHandle.getFileHandle is not a function
+    const uploader = new Sqlite3DbUploader(sqlFile)
+    uploader.setup() 
+    const downloader = new Sqlite3DbDownloader(sqlFile)
+    document.getElementById('download').addEventListener('click', async(event) => {
+        downloader.download() 
+    })
 });
 window.addEventListener('load', async(event) => {
     //Loading.hide()

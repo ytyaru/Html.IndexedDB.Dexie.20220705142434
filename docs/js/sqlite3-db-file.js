@@ -7,7 +7,7 @@ class Sqlite3DbFile { // FileSystemAccess API は Chromeでしか使えない
         this.#makeDexie()
     }
     #makeDexie() {
-        this.dexie = new Dexie(`UsersDb`);
+        this.dexie = new Dexie(`SelectedDirectoryDB`);
         this.dexie.version(1).stores({
             dirs: `++id`  // 一番最初に来るnameがキー。ageがインデックス。
         });

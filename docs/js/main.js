@@ -53,7 +53,11 @@ window.addEventListener('DOMContentLoaded', async(event) => {
 
 Loading.setup()
     const sqlFile = new Sqlite3DbFile()
-    await sqlFile.load() // sqlite3-db-file.js:43 Uncaught (in promise) TypeError: dirHandle.getFileHandle is not a function
+
+    // IndexedDBに保存されたディレクトリハンドルをロードするも関数までは保存されないらしい。
+    // sqlite3-db-file.js:43 Uncaught (in promise) TypeError: dirHandle.getFileHandle is not a function
+    await sqlFile.load() 
+
     const uploader = new Sqlite3DbUploader(sqlFile)
     uploader.setup() 
     const downloader = new Sqlite3DbDownloader(sqlFile)
